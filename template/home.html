@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | MedFlow{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 4rem 0 3rem 0;
+        animation: fadeIn 1s ease-out;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 3rem auto;
+    }
+
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .module-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        color: var(--text-main);
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--card-border);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), transparent);
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .module-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        color: var(--primary-dark);
+    }
+
+    .module-card:hover::before {
+        opacity: 1;
+    }
+
+    .module-icon {
+        font-size: 3.5rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+        display: inline-block;
+        transition: var(--transition);
+    }
+
+    .module-card:hover .module-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1 class="hero-title">Welcome to MedFlow</h1>
+    <p class="hero-subtitle">Experience the future of healthcare management with our intelligent, unified dashboard system.</p>
+
+    <div class="module-grid">
+        <!-- Doctors -->
+        <a href="{% url 'doc' %}" class="module-card">
+            <i class="bi bi-person-badge-fill module-icon text-primary"></i>
+            <h4 class="mb-0 fw-bold brand-text">Doctors Directory</h4>
+            <p class="text-muted mt-2 mb-0 small">Manage specializations and staff.</p>
+        </a>
+
+        <!-- Patients -->
+        <a href="{% url 'formm' %}" class="module-card">
+            <i class="bi bi-person-plus-fill module-icon text-success"></i>
+            <h4 class="mb-0 fw-bold brand-text">Register Patient</h4>
+            <p class="text-muted mt-2 mb-0 small">Onboard new patients instantly.</p>
+        </a>
+
+        <!-- Records -->
+        <a href="{% url 'patient_management' %}" class="module-card">
+            <i class="bi bi-clipboard2-pulse-fill module-icon text-warning"></i>
+            <h4 class="mb-0 fw-bold brand-text">Medical Records</h4>
+            <p class="text-muted mt-2 mb-0 small">View appointments and history.</p>
+        </a>
+
+        <!-- Predict AI -->
+        <a href="{% url 'sugar' %}" class="module-card">
+            <i class="bi bi-robot module-icon text-danger"></i>
+            <h4 class="mb-0 fw-bold brand-text">AI Diagnostics</h4>
+            <p class="text-muted mt-2 mb-0 small">Predict diabetes with ML.</p>
+        </a>
+    </div>
+</div>
+{% endblock %}

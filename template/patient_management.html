@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Management | MedFlow{% endblock %}
+
+{% block content %}
+<div class="glass-card mb-4 border-0" style="padding: 1.5rem 2.5rem;">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h3 class="premium-title mb-md-0"><i class="bi bi-clipboard2-pulse-fill"></i> Appointment Records</h3>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" class="d-flex justify-content-md-end align-items-center gap-3">
+                <label class="fw-medium text-muted mb-0 white-space-nowrap">Filter by Doctor:</label>
+                <div class="form-floating w-50" style="min-width: 250px;">
+                    <select name="doctor" class="form-select bg-light" id="filterDoc" onchange="this.form.submit()" style="padding-top: 1.25rem; padding-bottom: 0.25rem;">
+                        <option value="">All Doctors Overview</option>
+                        {% for d in doctors %}
+                            <option value="{{ d.id }}" {% if doctor_id == d.id|stringformat:"s" %}selected{% endif %}>{{ d.doctor_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="filterDoc" class="small">Choose specialist</label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="glass-card">
+    {% if data %}
+    <div class="table-responsive">
+        <table class="table premium-table">
+            <thead>
+                <tr>
+                    <th>Patient Details</th>
+                    <th>Age</th>
+                    <th>Schedule</th>
+                    <th>Assigned Specialist</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td class="fw-semibold">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-person-fill fs-5"></i>
+                            </div>
+                            {{ i.patient_name }}
+                        </div>
+                    </td>
+                    <td>{{ i.age }} yrs</td>
+                    <td>
+                        <span class="badge bg-light text-dark border">
+                            <i class="bi bi-calendar3 me-1 text-primary"></i> 
+                            {{ i.appointment_date }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="fw-medium text-dark">{{ i.doctor.doctor_name }}</div>
+                        <div class="small text-muted">{{ i.doctor.specialization }}</div>
+                    </td>
+                    <td class="text-end">
+                        <a href="{% url 'delete_patient' i.id %}" class="action-btn text-decoration-none" onclick="return confirm('Cancel this appointment and remove record?')">
+                            <i class="bi bi-x-lg"></i> Cancel
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center text-muted py-5">
+        <i class="bi bi-calendar-x display-1 opacity-25"></i>
+        <h5 class="mt-3">No Appointments Found</h5>
+        <p class="mb-0">Selected doctor currently has no assigned patients.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
