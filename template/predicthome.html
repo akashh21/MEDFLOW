@@ -1,116 +1,83 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}AI Diagnostics | MedFlow{% endblock %}
-
-{% block extra_css %}
-<style>
-    .prediction-result {
-        animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-
-    @keyframes scaleIn {
-        0% { transform: scale(0.9); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-</style>
-{% endblock %}
+{% block title %}Diabetes Prediction - MedFlow{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        
-        <div class="glass-card mb-4" style="text-align: center;">
-            <div class="d-inline-block bg-danger bg-opacity-10 text-danger rounded-circle p-3 mb-3">
-                <i class="bi bi-robot display-5"></i>
-            </div>
-            <h2 class="premium-title justify-content-center mb-2">MedFlow AI Diagnostics</h2>
-            <p class="text-muted">Enter health metrics below to predict the likelihood of diabetes using our Machine Learning model.</p>
-        </div>
-
-        {% if result %}
-            <div class="glass-card border-0 mb-4 prediction-result {% if 'does not have' in result %}bg-success bg-opacity-10{% elif 'Error' in result %}bg-warning bg-opacity-10{% else %}bg-danger bg-opacity-10{% endif %}">
-                <div class="d-flex align-items-center gap-4">
-                    <div class="fs-1 {% if 'does not have' in result %}text-success{% elif 'Error' in result %}text-warning{% else %}text-danger{% endif %} border-end pe-4">
-                        <i class="{% if 'does not have' in result %}bi bi-check-circle-fill{% elif 'Error' in result %}bi bi-exclamation-triangle-fill{% else %}bi bi-exclamation-circle-fill{% endif %}"></i>
-                    </div>
-                    <div>
-                        <h4 class="mb-1 fw-bold {% if 'does not have' in result %}text-success{% elif 'Error' in result %}text-dark{% else %}text-danger{% endif %}">Analysis Result</h4>
-                        <p class="mb-0 fs-5 {% if 'does not have' in result %}text-success{% elif 'Error' in result %}text-dark{% else %}text-danger{% endif %}">{{ result }}</p>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        <div class="glass-card">
+<div class="grid grid-cols-2">
+    <div>
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Diabetes Assessment</h2>
             <form method="post">
                 {% csrf_token %}
-                <h4 class="mb-4 text-dark font-weight-bold"><i class="bi bi-activity text-primary me-2"></i> Patient Metrics</h4>
-                
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="pregnancies" id="val1" class="form-control" required>
-                            <label for="val1">Pregnancies (Count)</label>
-                        </div>
+                <div class="grid grid-cols-2">
+                    <div class="form-group">
+                        <label for="pregnancies" class="form-label">Pregnancies</label>
+                        <input type="number" id="pregnancies" name="pregnancies" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="glucose" id="val2" class="form-control" required>
-                            <label for="val2">Glucose Level</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="glucose" class="form-label">Glucose</label>
+                        <input type="number" id="glucose" name="glucose" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="blood_pressure" id="val3" class="form-control" required>
-                            <label for="val3">Blood Pressure (mm Hg)</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="blood_pressure" class="form-label">Blood Pressure</label>
+                        <input type="number" id="blood_pressure" name="blood_pressure" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="skin_thickness" id="val4" class="form-control" required>
-                            <label for="val4">Skin Thickness (mm)</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="skin_thickness" class="form-label">Skin Thickness</label>
+                        <input type="number" id="skin_thickness" name="skin_thickness" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="insulin" id="val5" class="form-control" required>
-                            <label for="val5">Insulin (mu U/ml)</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="insulin" class="form-label">Insulin</label>
+                        <input type="number" id="insulin" name="insulin" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="bmi" id="val6" class="form-control" required>
-                            <label for="val6">Body Mass Index (BMI)</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="bmi" class="form-label">BMI</label>
+                        <input type="number" step="0.1" id="bmi" name="bmi" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="diabetes_pedigree_function" id="val7" class="form-control" required>
-                            <label for="val7">Diabetes Pedigree Function</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="diabetes_pedigree_function" class="form-label">Diabetes Pedigree</label>
+                        <input type="number" step="0.001" id="diabetes_pedigree_function" name="diabetes_pedigree_function" class="form-control" required>
                     </div>
-                    
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <input type="number" step="any" name="age" id="val8" class="form-control" required>
-                            <label for="val8">Age (Years)</label>
-                        </div>
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" id="age" name="age" class="form-control" required>
                     </div>
                 </div>
-
-                <div class="mt-4 pt-3 border-top">
-                    <button type="submit" class="btn-gradient w-100 fs-5 py-3">
-                        <i class="bi bi-magic me-2"></i> Run AI Prediction
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-primary mt-4" style="width: 100%;">Run AI Prediction</button>
             </form>
         </div>
+    </div>
+    
+    <div>
+        {% if result %}
+        <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            {% if "does not have" in result %}
+                <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">✅</div>
+                <h2 style="color: var(--success);">Low Risk</h2>
+            {% elif "Error" in result %}
+                <div style="font-size: 4rem; color: var(--danger); margin-bottom: 1rem;">⚠️</div>
+                <h2 style="color: var(--danger);">Prediction Error</h2>
+            {% else %}
+                <div style="font-size: 4rem; color: var(--danger); margin-bottom: 1rem;">⚠️</div>
+                <h2 style="color: var(--danger);">High Risk Detected</h2>
+            {% endif %}
+            
+            <p class="mt-4" style="font-size: 1.125rem;">{{ result }}</p>
+            
+            {% if "does not have" not in result and "Error" not in result %}
+                <div class="mt-8">
+                    <p class="text-muted mb-4">Please consult a doctor immediately for further evaluation.</p>
+                    <a href="{% url 'formm' %}" class="btn btn-primary">Book Appointment Now</a>
+                </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background-color: var(--background); border-style: dashed;">
+            <div style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;">📊</div>
+            <h3 class="text-muted">Awaiting Input</h3>
+            <p class="text-muted mt-2">Fill out the form to the left to run our AI prediction model.</p>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
